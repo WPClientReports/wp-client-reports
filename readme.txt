@@ -1,10 +1,10 @@
 === WP Client Reports ===
-Contributors: thejester12, MikeGillihan
+Contributors: MikeGillihan, causelabs
 Donate link: https://switchwp.com/plugins/wp-client-reports/
-Tags:  reports, client reports, reporting, statistics, analytics, maintenance, updates, plugin updates, theme updates
+Tags: reports, client reports, admin dashboard, analytics, maintenance
 Requires at least: 5.3.0
-Tested up to: 6.1
-Stable tag: 1.0.21
+Tested up to: 6.4
+Stable tag: 1.0.22
 Requires PHP: 5.6.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -29,7 +29,7 @@ Send a professional looking email including update statistics whenever you compl
 
 - Site Maintenance Notes
 - Google Analytics
-- Gravity Forms, Ninja Forms, WP Forms, Fomidable Forms & Contact Form 7
+- Gravity Forms, Ninja Forms, WP Forms, Formidable Forms & Contact Form 7
 - Uptime Robot & Pingdom
 - UpdraftPlus, BackWPup & BackupBuddy, WPEngine Backups
 - Mailchimp
@@ -63,6 +63,10 @@ WordPress by default does not track when updates have happened. WP Client Report
 
 
 == Changelog ==
+
+= 1.0.22 =
+* Tested up to 6.4
+* Update readme
 
 = 1.0.21 =
 * Update readme
