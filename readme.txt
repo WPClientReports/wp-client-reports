@@ -1,42 +1,61 @@
 === WP Client Reports ===
 Contributors: MikeGillihan, causelabs
 Donate link: https://switchwp.com/plugins/wp-client-reports/
-Tags: reports, client reports, admin dashboard, analytics, maintenance
+Tags: reports, client reports, maintenance reports, analytics, client dashboard
 Requires at least: 5.3.0
 Tested up to: 6.4
-Stable tag: 1.0.22
+Stable tag: 1.0.23
 Requires PHP: 5.6.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Send professional client maintenance report emails, including software update statistics for plugins, themes, and WordPress.
+The best maintenance reporting tool for WordPress professionals. Display update statistics directly in the WordPress admin or send reports via email.
 
 == Description ==
 
-Deliver confidence and prove your value routinely to clients and stakeholders.
+WP Client Reports is a powerful plugin designed for WordPress freelancers, agencies, and website managers who provide care and maintenance services for their clients and stakeholders.
 
-== Client Website Maintenance Reports ==
+== Streamline Your Maintenance Reporting ==
 
-The perfect maintenance report builder plugin for agencies, freelancers and site maintainers who update their client's sites on a weekly, monthly, or quarterly basis. The plugin tracks what updates have happened and records them daily.
+This essential tool tracks WordPress core, plugin, and theme updates on the fly and provides detailed, professional reports directly inside the WordPress admin dashboard.
 
-You can use the cleanly designed reporting analytics screen to show the updates that have happened within amounts of time such as last month, this month, last 30 days, or a custom length.
+You and your clients can quickly switch between different time periods to view update statistics, giving you and them a clear, on-demand understanding of maintenance activities.
 
-Send a professional looking email including update statistics whenever you complete updates to show the value of your work to your client or other site stakeholders. No PDF's here, just a nicely designed email.
+== Email Maintenance Reports to Key Stakeholders ==
 
-== Pro Version ==
+Keeping your clients and other site stakeholders updated with a detailed, professional-looking email report is a simple point-and-click! The are no PDFs here, just a nicely designed email.
 
-[WP Client Reports Pro](https://switchwp.com/plugins/wp-client-reports/?utm_source=wporg&utm_medium=readme&utm_campaign=wpclientreports) allows you to self brand the maintenance report email with your logo and company color. It allows you to send reports out automatically on a weekly or monthly schedule. It also adds a number of optional integrations with other services and plugins to display their statistics.
+> <strong>WP Client Reports Pro</strong><br />
+> This plugin is the lite version of WP Client Reports Pro, which includes custom branding, automated report scheduling, maintenance notes, and many other integrations.<br />
+> [Click here to purchase the best WordPress reporting plugin now!](https://wpforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteplugin)
 
-- Site Maintenance Notes
-- Google Analytics
-- Gravity Forms, Ninja Forms, WP Forms, Formidable Forms & Contact Form 7
-- Uptime Robot & Pingdom
-- UpdraftPlus, BackWPup & BackupBuddy, WPEngine Backups
-- Mailchimp
-- SearchWP
-- WooCommerce, Easy Digital Downloads, GiveWP & Stripe
+== — Pro Version — ==
 
-Have an idea that should be added? Let me know at [SwitchWP](https://switchwp.com/plugins/wp-client-reports/?utm_source=wporg&utm_medium=readme&utm_campaign=wpclientreports).
+[WP Client Reports Pro](https://switchwp.com/plugins/wp-client-reports/?utm_source=wporg&utm_medium=link&utm_campaign=wpclientreports&utm_content=readme) takes your client reporting to the next level. With this upgrade, you can brand your maintenance reports with your logo and company color, schedule automatic report delivery, and integrate additional statistics from a variety of services and plugins.
+
+[Click here to purchase WP Client Reports Pro now!](https://switchwp.com/plugins/wp-client-reports/?utm_source=wporg&utm_medium=link&utm_campaign=wpclientreports&utm_content=readme)
+
+= Pro Version Features =
+
+- **Custom Branding**: Personalize your reports with your company's branding, adding a professional touch to your communications.
+- **Scheduled Reports**: Set up automatic delivery of reports on a weekly or monthly basis, ensuring consistent and timely updates for your clients.
+- **Extended Integrations**: Enhance your reports with additional statistics from:
+  - Site Maintenance Notes
+  - Google Analytics
+  - Form Plugins (Gravity Forms, Ninja Forms, WP Forms, Formidable Forms, Contact Form 7)
+  - Uptime Monitoring (Uptime Robot, Pingdom)
+  - Backup Solutions (UpdraftPlus, BackWPup, BackupBuddy, WPEngine Backups)
+  - Email Marketing (Mailchimp)
+  - Search Optimization (SearchWP)
+  - E-commerce and Donations (WooCommerce, Easy Digital Downloads, GiveWP, Stripe)
+
+== The Perfect Solution for WordPress Professionals ==
+
+- **Elevate Your Brand**: Stand out with reports that reflect your company's identity.
+- **Streamline Your Workflow**: Automate report delivery, saving you time and effort.
+- **Provide Comprehensive Insights**: Offer clients a complete overview of their website's performance and your maintenance activities.
+
+Have an idea that should be added? Get in touch at [SwitchWP](https://switchwp.com/contact/?utm_source=wporg&utm_medium=link&utm_campaign=wpclientreports&utm_content=readme).
 
 == Installation ==
 
@@ -45,13 +64,11 @@ Have an idea that should be added? Let me know at [SwitchWP](https://switchwp.co
 3. Use the Settings->WP Client Reports screen to configure the default settings.
 4. Use the Dashboard->Reports screen to view update statistics.
 
-
 == Frequently Asked Questions ==
 
 = Where Are My Past Updates? =
 
-WordPress by default does not track when updates have happened. WP Client Reports adds the functionality to do that, but that means that it cannot report on updates that happened before the plugin was installed.
-
+WordPress, by default, does not track when updates have happened. WP Client Reports adds the functionality to do that, but it cannot report updates that happened before the plugin was installed.
 
 == Screenshots ==
 
@@ -61,8 +78,11 @@ WordPress by default does not track when updates have happened. WP Client Report
 3. Adds a handy dashboard widget
 4. Manage email settings and which sections are enabled
 
-
 == Changelog ==
+
+= 1.0.23 =
+* Adds additional security hardening
+* Update readme
 
 = 1.0.22 =
 * Tested up to 6.4
@@ -149,7 +169,6 @@ WordPress by default does not track when updates have happened. WP Client Report
 
 = 1.0.0 =
 * Initial Version
-
 
 == Upgrade Notice ==
 
