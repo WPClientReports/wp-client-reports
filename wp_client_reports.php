@@ -13,7 +13,7 @@ Domain Path: /languages/
 if( !defined( 'ABSPATH' ) )
 	exit;
 
-define( 'WP_CLIENT_REPORTS_VERSION', '1.0.22' );
+define( 'WP_CLIENT_REPORTS_VERSION', '1.0.23' );
 
 /**
  * Add scripts and styles into the admin as needed
