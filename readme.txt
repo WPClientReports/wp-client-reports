@@ -81,6 +81,8 @@ WordPress, by default, does not track when updates have happened. WP Client Repo
 == Changelog ==
 
 = 1.0.23 =
+* Improve code formatting
+* Update Moment.js to 2.30.1
 * Adds additional security hardening
 * Update readme
 

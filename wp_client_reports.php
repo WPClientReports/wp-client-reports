@@ -16,25 +16,31 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 define( 'WP_CLIENT_REPORTS_VERSION', '1.0.23' );
 
+add_action( 'admin_enqueue_scripts', 'wp_client_reports_scripts' );
 /**
  * Add scripts and styles into the admin as needed
  */
 function wp_client_reports_scripts() {
-
 	wp_enqueue_style( 'wp-client-reports-css', plugin_dir_url( __FILE__ ) . '/css/wp-client-reports.css', array(), WP_CLIENT_REPORTS_VERSION );
 
 	$screen = get_current_screen();
 
 	if ( $screen && ( $screen->id == 'dashboard_page_wp_client_reports' || $screen->id == 'settings_page_wp_client_reports' ) ) {
 
-		wp_enqueue_script( 'jquery-ui-datepicker' );
-		wp_enqueue_script( 'moment-js', plugin_dir_url( __FILE__ ) . 'js/moment.js', array(), '2.29.4', true );
+		// Check if WP is loading Moment
+		if ( ! wp_script_is( 'moment' ) ) {
+			wp_enqueue_script( 'moment-min', plugin_dir_url( __FILE__ ) . 'js/moment.min.js', array(), '2.30.1', true );
+		}
+
 		wp_enqueue_script( 'thickbox' );
 		wp_enqueue_style( 'thickbox' );
+		wp_enqueue_script( 'jquery-ui-datepicker' );
 		wp_register_script( 'wp-client-reports-js', plugin_dir_url( __FILE__ ) . 'js/wp-client-reports.js', array(
 			'jquery',
-			'jquery-ui-datepicker'
+			'jquery-ui-datepicker',
+			'moment-min'
 		), WP_CLIENT_REPORTS_VERSION, true );
+
 		$date_format = get_option( 'date_format' );
 		$utc_offset  = get_option( 'gmt_offset' );
 		$js_data     = array(
@@ -44,20 +50,16 @@ function wp_client_reports_scripts() {
 			'nopluginupdates'    => __( 'No Plugin Updates', 'wp-client-reports' ),
 			'nothemeupdates'     => __( 'No Theme Updates', 'wp-client-reports' )
 		);
+
 		wp_localize_script( 'wp-client-reports-js', 'wp_client_reports_data', $js_data );
 		wp_enqueue_script( 'wp-client-reports-js' );
-
 	}
-
 }
 
-add_action( 'admin_enqueue_scripts', 'wp_client_reports_scripts' );
-
-
+add_filter( 'plugin_action_links', 'wp_client_reports_plugin_page_links1', 10, 2 );
 /**
  * Add Reports and Settings links into plugin page information
  */
-add_filter( 'plugin_action_links', 'wp_client_reports_plugin_page_links1', 10, 2 );
 function wp_client_reports_plugin_page_links1( $links_array, $plugin_file_name ) {
 	if ( strpos( $plugin_file_name, basename( __FILE__ ) ) ) {
 		array_unshift( $links_array, '<a href="' . admin_url( 'index.php?page=wp_client_reports' ) . '">' . __( 'Reports', 'wp-client-reports' ) . '</a>' );
@@ -67,11 +69,10 @@ function wp_client_reports_plugin_page_links1( $links_array, $plugin_file_name )
 	return $links_array;
 }
 
-
+add_filter( 'plugin_row_meta', 'wp_client_reports_plugin_page_links2', 10, 4 );
 /**
  * Add Docs links into plugin page information
  */
-add_filter( 'plugin_row_meta', 'wp_client_reports_plugin_page_links2', 10, 4 );
 function wp_client_reports_plugin_page_links2( $links_array, $plugin_file_name, $plugin_data, $status ) {
 	if ( strpos( $plugin_file_name, basename( __FILE__ ) ) ) {
 		$links_array[] = '<a href="https://switchwp.com/docs/product/wp-client-reports/?utm_source=wordpress&utm_medium=pluginscreen&utm_campaign=wpclientreports" target="_blank">' . __( 'Docs', 'wp-client-reports' ) . '</a>';
@@ -80,11 +81,10 @@ function wp_client_reports_plugin_page_links2( $links_array, $plugin_file_name, 
 	return $links_array;
 }
 
-
+register_activation_hook( __FILE__, 'wp_client_reports_data_install' );
 /**
  * On plugin activation create the database tables needed to store updates
  */
-register_activation_hook( __FILE__, 'wp_client_reports_data_install' );
 function wp_client_reports_data_install() {
 	global $wpdb;
 	global $wp_client_reports_version;
@@ -115,13 +115,11 @@ function wp_client_reports_data_install() {
 	wp_client_reports_check_for_updates();
 }
 
-
+add_action( 'init', 'wp_client_reports_load_actions', 985 );
 /**
  * Load actions if options are enabled
  */
-add_action( 'init', 'wp_client_reports_load_actions', 985 );
 function wp_client_reports_load_actions() {
-
 	if ( is_admin() || wp_doing_cron() ) {
 
 		$updates_enabled = get_option( 'wp_client_reports_enable_updates' );
@@ -137,16 +135,13 @@ function wp_client_reports_load_actions() {
 			add_action( 'wp_client_reports_stats_email', 'wp_client_reports_stats_email_content', 30, 2 );
 			add_action( 'wp_ajax_wp_client_reports_content_stats_data', 'wp_client_reports_content_stats_data' );
 		}
-
 	}
-
 }
 
-
+register_activation_hook( __FILE__, 'wp_client_reports_check_for_updates_daily_schedule' );
 /**
  * On plugin activation schedule our daily check for updates
  */
-register_activation_hook( __FILE__, 'wp_client_reports_check_for_updates_daily_schedule' );
 function wp_client_reports_check_for_updates_daily_schedule() {
 	//Use wp_next_scheduled to check if the event is already scheduled
 	$timestamp = wp_next_scheduled( 'wp_client_reports_check_for_updates_daily' );
@@ -159,33 +154,29 @@ function wp_client_reports_check_for_updates_daily_schedule() {
 	}
 }
 
-
+register_deactivation_hook( __FILE__, 'wp_client_reports_check_for_updates_daily_schedule_clear' );
 /**
  * On plugin deactivation remove the scheduled events
  */
-register_deactivation_hook( __FILE__, 'wp_client_reports_check_for_updates_daily_schedule_clear' );
 function wp_client_reports_check_for_updates_daily_schedule_clear() {
 	wp_clear_scheduled_hook( 'wp_client_reports_check_for_updates_daily' );
 }
 
-
+add_action( 'upgrader_process_complete', 'wp_client_reports_after_update', 10, 2 );
 /**
  * After an update has run, check and log in database
  */
-add_action( 'upgrader_process_complete', 'wp_client_reports_after_update', 10, 2 );
 function wp_client_reports_after_update( $upgrader_object, $options ) {
 	if ( $options['action'] == 'update' ) {
 		wp_client_reports_check_for_updates();
 	}
 }
 
-
+add_action( 'wp_client_reports_check_for_updates_daily', 'wp_client_reports_check_for_updates' );
 /**
  * Loop through each type of update and determine if there is now a newer version
  */
-add_action( 'wp_client_reports_check_for_updates_daily', 'wp_client_reports_check_for_updates' );
 function wp_client_reports_check_for_updates() {
-
 	global $wpdb;
 	$wp_client_reports_table_name = $wpdb->prefix . 'update_tracking';
 
@@ -227,7 +218,6 @@ function wp_client_reports_check_for_updates() {
 		);
 
 		wp_client_reports_track_update( $wp_update );
-
 	}
 
 	$themes = wp_get_themes();
@@ -316,15 +306,11 @@ function wp_client_reports_check_for_updates() {
 			);
 
 			wp_client_reports_track_update( $plugin_update );
-
 		}
-
 	}
 
 	do_action( 'wp_client_reports_check' );
-
 }
-
 
 /**
  * Track a single update and add it to the database
@@ -350,14 +336,12 @@ function wp_client_reports_track_update( $thing_to_track ) {
 	);
 
 	return $new_entry;
-
 }
 
-
+add_action( 'wp_dashboard_setup', 'wp_client_reports_add_dashboard_widget' );
 /**
  * Add a widget to the dashboard.
  */
-add_action( 'wp_dashboard_setup', 'wp_client_reports_add_dashboard_widget' );
 function wp_client_reports_add_dashboard_widget() {
 	if ( current_user_can( 'manage_options' ) ) {
 		wp_add_dashboard_widget(
@@ -367,7 +351,6 @@ function wp_client_reports_add_dashboard_widget() {
 		);
 	}
 }
-
 
 /**
  * Create the function to output the contents of our Dashboard Widget.
@@ -399,16 +382,14 @@ function wp_client_reports_last30_widget_function() {
 	<?php
 }
 
-
+add_action( 'admin_menu', 'wp_client_reports_add_admin_menu' );
 /**
  * Register options pages for the menu
  */
-add_action( 'admin_menu', 'wp_client_reports_add_admin_menu' );
 function wp_client_reports_add_admin_menu() {
 	add_options_page( __( 'WP Client Reports Settings', 'wp-client-reports' ), __( 'WP Client Reports', 'wp-client-reports' ), 'manage_options', 'wp_client_reports', 'wp_client_reports_options_page' );
 	add_submenu_page( 'index.php', __( 'Reports', 'wp-client-reports' ), __( 'Reports', 'wp-client-reports' ), 'manage_options', 'wp_client_reports', 'wp_client_reports_stats_page' );
 }
-
 
 /**
  * Main WP Client Reports page
@@ -504,7 +485,6 @@ function wp_client_reports_stats_page() {
 	<?php
 }
 
-
 /**
  * Software Updates section
  */
@@ -572,7 +552,6 @@ function wp_client_reports_stats_page_updates() {
 	<?php
 }
 
-
 /**
  * Ajax call for software updates stats data
  */
@@ -601,7 +580,6 @@ function wp_client_reports_updates_data() {
 
 }
 
-
 /**
  * Validate dates anytime you get an request for data
  */
@@ -620,7 +598,6 @@ function wp_client_reports_validate_dates( $start, $end ) {
 
 	return $dates;
 }
-
 
 /**
  * Get the software updates data from the database
@@ -663,14 +640,12 @@ function wp_client_reports_get_updates_data( $start_date, $end_date ) {
 	$data = apply_filters( 'wp_client_reports_updates_data', $data, $start_date, $end_date );
 
 	return $data;
-
 }
 
-
+add_filter( 'wp_client_reports_email_data', 'wp_client_reports_email_updates_data', 11, 3 );
 /**
  * Filter the data when a report email is being put together and add software updates
  */
-add_filter( 'wp_client_reports_email_data', 'wp_client_reports_email_updates_data', 11, 3 );
 function wp_client_reports_email_updates_data( $data, $start_date, $end_date ) {
 	$updates       = new \stdClass;
 	$updates       = wp_client_reports_get_updates_data( $start_date, $end_date );
@@ -679,13 +654,11 @@ function wp_client_reports_email_updates_data( $data, $start_date, $end_date ) {
 	return $data;
 }
 
-
+add_action( 'wp_ajax_wp_client_reports_force_refresh', 'wp_client_reports_force_refresh' );
 /**
  * Force an update to the software update statistics
  */
-add_action( 'wp_ajax_wp_client_reports_force_refresh', 'wp_client_reports_force_refresh' );
 function wp_client_reports_force_refresh() {
-
 	if ( ! current_user_can( 'manage_options' ) ) {
 		echo json_encode( [ 'status' => 'error', 'message' => __( 'You do not have administrator privilages.', 'wp-client-reports' ) ] );
 		wp_die();
@@ -697,15 +670,12 @@ function wp_client_reports_force_refresh() {
 
 	print json_encode( [ 'status' => 'success' ] );
 	wp_die();
-
 }
-
 
 /**
  * Ajax call for content stats data
  */
 function wp_client_reports_content_stats_data() {
-
 	if ( ! current_user_can( 'manage_options' ) ) {
 		echo json_encode( [ 'status' => 'error', 'message' => __( 'You do not have administrator privilages.', 'wp-client-reports' ) ] );
 		wp_die();
@@ -726,7 +696,6 @@ function wp_client_reports_content_stats_data() {
 
 	print json_encode( $data );
 	wp_die();
-
 }
 
 
@@ -734,7 +703,6 @@ function wp_client_reports_content_stats_data() {
  * Get the content stats data from the database
  */
 function wp_client_reports_get_content_stats_data( $start_date, $end_date ) {
-
 	global $wpdb;
 	$posts_table_name    = $wpdb->prefix . 'posts';
 	$comments_table_name = $wpdb->prefix . 'comments';
@@ -764,14 +732,12 @@ function wp_client_reports_get_content_stats_data( $start_date, $end_date ) {
 	$data = apply_filters( 'wp_client_reports_content_stats_data', $data, $start_date, $end_date );
 
 	return $data;
-
 }
 
-
+add_filter( 'wp_client_reports_email_data', 'wp_client_reports_email_content_stats_data', 11, 3 );
 /**
  * Filter the data when a report email is being put together and add content stats
  */
-add_filter( 'wp_client_reports_email_data', 'wp_client_reports_email_content_stats_data', 11, 3 );
 function wp_client_reports_email_content_stats_data( $data, $start_date, $end_date ) {
 	$updates       = new \stdClass;
 	$updates       = wp_client_reports_get_content_stats_data( $start_date, $end_date );
@@ -779,7 +745,6 @@ function wp_client_reports_email_content_stats_data( $data, $start_date, $end_da
 
 	return $data;
 }
-
 
 /**
  * Stats page for content stats
@@ -834,7 +799,7 @@ add_action( 'wp_ajax_wp_client_reports_send_email_report', 'wp_client_reports_se
  * Responses are returned as JSON objects indicating the success or failure of the operation,
  * along with a relevant message.
  *
- * @uses wp_verify_nonce() To verify the nonce for security.
+ * @return void The function directly outputs the JSON response and exits.
  * @uses current_user_can() To check if the current user has administrative privileges.
  * @uses sanitize_text_field() To sanitize the 'report_title', 'start', and 'end' fields.
  * @uses wp_kses_post() To sanitize the 'report_intro' field if present.
@@ -843,7 +808,7 @@ add_action( 'wp_ajax_wp_client_reports_send_email_report', 'wp_client_reports_se
  * @uses wp_send_json_success() To send a JSON success response.
  * @uses wp_send_json_error() To send a JSON error response.
  *
- * @return void The function directly outputs the JSON response and exits.
+ * @uses wp_verify_nonce() To verify the nonce for security.
  */
 function wp_client_reports_send_email_report_from_ajax() {
 	// Check for admin
@@ -900,7 +865,6 @@ function wp_client_reports_send_email_report_from_ajax() {
  * Send an emailed report
  */
 function wp_client_reports_send_email_report( $start, $end, $report_title = null, $report_intro = null, $report_email = null ) {
-
 	if ( ! $report_title ) {
 		$report_title = sanitize_text_field( get_option( 'wp_client_reports_default_title', null ) );
 		if ( ! $report_title ) {
@@ -965,7 +929,6 @@ function wp_client_reports_send_email_report( $start, $end, $report_title = null
 		$end_date_formatted   = $end_date_object->format( $date_format );
 		$date_formatted       = sprintf( __( 'From %s - %s', 'wp-client-reports' ), esc_html( $start_date_formatted ), esc_html( $end_date_formatted ) );
 	}
-
 
 	$brand_color = wp_client_reports_get_brand_color();
 
@@ -1037,9 +1000,7 @@ function wp_client_reports_send_email_report( $start, $end, $report_title = null
 	$sent = wp_mail( $report_email, $subject, $body, $headers );
 
 	return $sent;
-
 }
-
 
 /**
  * Render a big number in the HTML report page
@@ -1054,7 +1015,6 @@ function wp_client_reports_render_big_number( $title, $id ) {
 	<?php
 }
 
-
 /**
  * Render an email header
  */
@@ -1068,7 +1028,6 @@ function wp_client_reports_render_email_header( $title ) {
     </tr>
 	<?php
 }
-
 
 /**
  * Render an email row
@@ -1093,7 +1052,6 @@ function wp_client_reports_render_email_row( $stat1, $label1, $stat2, $label2 ) 
 	<?php
 }
 
-
 /**
  * Render a big number in the emailed report
  */
@@ -1107,7 +1065,6 @@ function wp_client_reports_render_email_big_number( $stat, $label ) {
 		<?php
 	}
 }
-
 
 /**
  * Email section for software updates
@@ -1189,7 +1146,6 @@ function wp_client_reports_stats_email_updates( $start_date, $end_date ) {
 	endif; //$include_update_details
 }
 
-
 /**
  * Email section for content stats
  */
@@ -1214,11 +1170,10 @@ function wp_client_reports_stats_email_content( $start_date, $end_date ) {
 	);
 }
 
-
+add_action( 'admin_init', 'wp_client_reports_options_init', 10 );
 /**
  * Register the WP CLient Report settings
  */
-add_action( 'admin_init', 'wp_client_reports_options_init', 10 );
 function wp_client_reports_options_init() {
 
 	register_setting( 'wp_client_reports_options_page', 'wp_client_reports_default_title' );
@@ -1323,9 +1278,7 @@ function wp_client_reports_options_init() {
 		'wp_client_reports_options_page',
 		'wp_client_reports_content_stats_section'
 	);
-
 }
-
 
 /**
  * Add default title field to the options page
@@ -1341,7 +1294,6 @@ function wp_client_reports_default_title_render() {
 	<?php
 }
 
-
 /**
  * Add default email field to the options page
  */
@@ -1355,7 +1307,6 @@ function wp_client_reports_default_email_render() {
     <p class="description"><?php _e( 'You can comma separate multiple addresses' ); ?></p>
 	<?php
 }
-
 
 /**
  * Add default email field to the options page
@@ -1371,7 +1322,6 @@ function wp_client_reports_email_from_render() {
 	<?php
 }
 
-
 /**
  * Add reply to email field to the options page
  */
@@ -1382,7 +1332,6 @@ function wp_client_reports_email_reply_render() {
     <p class="description"><?php _e( 'Optional. Only needed if different than the "from" address above.' ); ?></p>
 	<?php
 }
-
 
 /**
  * Add default email field to the options page
@@ -1397,7 +1346,6 @@ function wp_client_reports_name_from_render() {
 	<?php
 }
 
-
 /**
  * Add default intro field to the options page
  */
@@ -1408,7 +1356,6 @@ function wp_client_reports_default_intro_render() {
     <p class="description"><?php _e( 'You can use [YEAR], [MONTH], and [DATE] shortcodes for automatic replacement.' ); ?></p>
 	<?php
 }
-
 
 /**
  * Add email footer field to the options page
@@ -1423,14 +1370,12 @@ function wp_client_reports_email_footer_render() {
 	<?php
 }
 
-
 /**
  * Settings section help
  */
 function wp_client_reports_email_section_callback() {
 	//Print nothing
 }
-
 
 /**
  * Enable Software Updates Toggle Switch
@@ -1461,7 +1406,6 @@ function wp_client_reports_enable_content_stats_render() {
     </label>
 	<?php
 }
-
 
 /**
  * Create the WP Client Reports Settings Page
@@ -1555,7 +1499,6 @@ function wp_client_reports_get_brand_color() {
 	return apply_filters( 'wp_client_reports_brand_color', '#007cba' );
 }
 
-
 /**
  * Convert PHP date format to Moment.js date format
  */
@@ -1603,7 +1546,6 @@ function wp_client_reports_convert_date_format( $format ) {
 
 	return $moment_js_format;
 }
-
 
 /**
  * Remove dashes from dates and other places you want them cleared
@@ -1666,7 +1608,6 @@ function wp_client_reports_search_database_for_transients_by_prefix( $prefix ) {
  * @return array|bool                Count of total vs deleted or false on failure.
  */
 function wp_client_reports_delete_transients_from_keys( $transients ) {
-
 	if ( ! isset( $transients ) ) {
 		return false;
 	}
