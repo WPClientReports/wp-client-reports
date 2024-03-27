@@ -2,7 +2,7 @@
 /*
 Plugin Name: WP Client Reports
 Plugin URI: https://switchwp.com/wp-client-reports/
-Description: Send beautiful client maintenance reports with plugin and theme update tracking and more
+Description: Displays update statistics directly in the WordPress admin or send reports via email.
 Version: 1.0.23
 Author: SwitchWP
 Author URI: https://switchwp.com/
