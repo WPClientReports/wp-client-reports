@@ -450,7 +450,8 @@ function wp_client_reports_stats_page() {
             <?php endif; ?>
 
             <div id="wp-client-reports-which-email-modal" class="wp-client-reports-which-email-modal" style="display:none;">
-                <form method="GET" action="#" id="wp-client-reports-send-email-report">
+                <form method="POST" action="#" id="wp-client-reports-send-email-report">
+	                <?php wp_nonce_field('wpcr_send_report', 'wpcr_send_report_nonce'); ?>
                     <table class="form-table" role="presentation">
                         <tbody>
                             <tr>
@@ -784,42 +785,93 @@ function wp_client_reports_stats_page_content() {
 /**
  * Send an emailed report
  */
-add_action('wp_ajax_wp_client_reports_send_email_report', 'wp_client_reports_send_email_report_from_ajax');
+add_action( 'wp_ajax_wp_client_reports_send_email_report', 'wp_client_reports_send_email_report_from_ajax' );
 function wp_client_reports_send_email_report_from_ajax() {
+	// Verify nonce
+	if ( ! isset( $_POST['wpcr_send_report'] ) || ! wp_verify_nonce( $_POST['wpcr_send_report'], 'wpcr_send_report_nonce' ) ) {
+		wp_send_json_error( [ 'message' => __( 'Nonce verification failed.', 'wp-client-reports' ) ] );
+	}
 
-    if (!current_user_can('manage_options')) {
-        echo json_encode(['status' => 'error', 'message' => __( 'You do not have administrator privilages.', 'wp-client-reports' )]);
-        wp_die();
-    }
+	// Check for admin
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( [ 'message' => __( 'You do not have administrative privileges.', 'wp-client-reports' ) ] );
+	}
 
-    $report_title = sanitize_text_field($_POST['report_title']);
+	// Validate and sanitize input data
+	$report_title = sanitize_text_field( $_POST['report_title'] );
+	$start        = sanitize_text_field( $_POST['start'] );
+	$end          = sanitize_text_field( $_POST['end'] );
 
-    if (strpos($_POST['report_email'], ',') !== false) {
-        $report_email = [];
-        $temp_email_array = explode(",", $_POST['report_email']);
-        if (is_array($temp_email_array)) {
-            foreach($temp_email_array as $email) {
-                $report_email[] = sanitize_email($email);
-            }
-        }
-    } else {
-        $report_email = sanitize_email($_POST['report_email']);
-    }
+	// The report_intro field is optional, sanitize if present
+	$report_intro = isset( $_POST['report_intro'] ) ? wp_kses_post( $_POST['report_intro'] ) : '';
 
-    $report_intro = $_POST['report_intro'];
+	// Required fields check
+	if ( empty( $report_title ) || empty( $start ) || empty( $end ) ) {
+		wp_send_json_error( [ 'message' => __( 'Missing required field.', 'wp-client-reports' ) ] );
+	}
 
-    $start = sanitize_text_field($_POST['start']);
-    $end = sanitize_text_field($_POST['end']);
+	// Process email addresses
+	$report_email_raw   = $_POST['report_email'];
+	$report_email_array = explode( ",", $report_email_raw ); // Split by comma
+	$report_email       = array_map( 'trim', $report_email_array ); // Trim spaces from each email
 
-    $sent = wp_client_reports_send_email_report($start, $end, $report_title, $report_intro, $report_email);
+	// Sanitize and validate each email address
+	$report_email = array_filter( array_map( function ( $email ) {
+		$clean_email = sanitize_email( $email );
 
-    if ($sent) {
-        echo json_encode(['status' => 'success', 'message' => __( 'Report has been sent!', 'wp-client-reports' )]);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => __( 'There was an error sending the email.', 'wp-client-reports' )]);
-    }
+		return is_email( $clean_email ) ? $clean_email : null;
+	}, $report_email ) );
 
-    wp_die();
+	if ( empty( $report_email ) ) {
+		wp_send_json_error( [ 'message' => __( 'Invalid email address.', 'wp-client-reports' ) ] );
+	}
+
+	// Attempt to send the report
+	$sent = wp_client_reports_send_email_report( $start, $end, $report_title, $report_intro, $report_email );
+
+	// Send appropriate response
+	if ( $sent ) {
+		wp_send_json_success( [ 'message' => __( 'Report has been sent!', 'wp-client-reports' ) ] );
+	} else {
+		wp_send_json_error( [ 'message' => __( 'There was an error sending the email.', 'wp-client-reports' ) ] );
+	}
+
+
+
+
+//	if ( ! current_user_can( 'manage_options' ) ) {
+//		echo json_encode( [ 'status' => 'error', 'message' => __( 'You do not have administrator privilages.', 'wp-client-reports' ) ] );
+//		wp_die();
+//	}
+//
+//	$report_title = sanitize_text_field( $_POST['report_title'] );
+//
+//	if ( strpos( $_POST['report_email'], ',' ) !== false ) {
+//		$report_email     = [];
+//		$temp_email_array = explode( ",", $_POST['report_email'] );
+//		if ( is_array( $temp_email_array ) ) {
+//			foreach ( $temp_email_array as $email ) {
+//				$report_email[] = sanitize_email( $email );
+//			}
+//		}
+//	} else {
+//		$report_email = sanitize_email( $_POST['report_email'] );
+//	}
+//
+//	$report_intro = $_POST['report_intro'];
+//
+//	$start = sanitize_text_field( $_POST['start'] );
+//	$end   = sanitize_text_field( $_POST['end'] );
+//
+//	$sent = wp_client_reports_send_email_report( $start, $end, $report_title, $report_intro, $report_email );
+//
+//	if ( $sent ) {
+//		echo json_encode( [ 'status' => 'success', 'message' => __( 'Report has been sent!', 'wp-client-reports' ) ] );
+//	} else {
+//		echo json_encode( [ 'status' => 'error', 'message' => __( 'There was an error sending the email.', 'wp-client-reports' ) ] );
+//	}
+//
+//	wp_die();
 
 }
 
