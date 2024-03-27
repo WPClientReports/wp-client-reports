@@ -29,7 +29,7 @@ function wp_client_reports_scripts() {
 
 		// Check if WP is loading Moment
 		if ( ! wp_script_is( 'moment' ) ) {
-			wp_enqueue_script( 'moment-min', plugin_dir_url( __FILE__ ) . 'js/moment.min.js', array(), '2.30.1', true );
+			wp_enqueue_script( 'moment', plugin_dir_url( __FILE__ ) . 'js/moment.min.js', array(), '2.30.1', true );
 		}
 
 		wp_enqueue_script( 'thickbox' );
@@ -38,7 +38,7 @@ function wp_client_reports_scripts() {
 		wp_register_script( 'wp-client-reports-js', plugin_dir_url( __FILE__ ) . 'js/wp-client-reports.js', array(
 			'jquery',
 			'jquery-ui-datepicker',
-			'moment-min'
+			'moment'
 		), WP_CLIENT_REPORTS_VERSION, true );
 
 		$date_format = get_option( 'date_format' );
