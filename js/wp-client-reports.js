@@ -184,34 +184,49 @@
             $("#wp-client-reports-report-status").hide();
             $("#wp-client-reports-send-email-report").show();
         });
-        
 
         $("#wp-client-reports-send-email-report").submit(function(e) {
             e.preventDefault();
             $("#send-report-spinner").show();
             $('#wp-client-reports-send-email-report .button-primary').prop('disabled', true);
-            var dataString = $("#wp-client-reports-send-email-report").serialize();
+
+            // Including the nonce in the dataString
+            var dataString = $("#wp-client-reports-send-email-report").serialize() + "&wpcr_send_report_nonce=" + encodeURIComponent($('#wpcr_send_report_nonce').val());
+
             $.ajax({
                 type: "POST",
                 url: ajaxurl,
                 data: dataString,
                 dataType: 'json',
-                success: function(data, err) {
-                    if (data.status == 'success') {
-                        $("#wp-client-reports-send-email-report").hide();
-                        $("#send-report-spinner").hide();
-                        $("#wp-client-reports-report-status").addClass('wp-client-reports-success').removeClass('wp-client-reports-error').show().find('p').text(data.message);
-                        $('#wp-client-reports-send-email-report .button-primary').prop('disabled', false);
+                success: function(response) {
+                    $("#wp-client-reports-send-email-report").hide();
+                    $("#send-report-spinner").hide();
+                    $('#wp-client-reports-send-email-report .button-primary').prop('disabled', false);
+
+                    if (response.success) {
+                        $("#wp-client-reports-report-status")
+                            .addClass('wp-client-reports-success')
+                            .removeClass('wp-client-reports-error')
+                            .show().find('p').text(response.data.message);
                     } else {
-                        $("#wp-client-reports-send-email-report").hide();
-                        $("#send-report-spinner").hide();
-                        $("#wp-client-reports-report-status").addClass('wp-client-reports-error').removeClass('wp-client-reports-success').show().find('p').text(data.message);
-                        $('#wp-client-reports-send-email-report .button-primary').prop('disabled', false);
+                        $("#wp-client-reports-report-status")
+                            .addClass('wp-client-reports-error')
+                            .removeClass('wp-client-reports-success')
+                            .show().find('p').text(response.data.message);
                     }
+                },
+                error: function(xhr, status, error) {
+                    $("#wp-client-reports-send-email-report").hide();
+                    $("#send-report-spinner").hide();
+                    $('#wp-client-reports-send-email-report .button-primary').prop('disabled', false);
+                    // Handle error
+                    $("#wp-client-reports-report-status")
+                        .removeClass('wp-client-reports-success')
+                        .addClass('wp-client-reports-error')
+                        .show().find('p').text("Error: " + error);
                 }
             });
         });
-
     });
 
     function setDates(startDate, endDate, label) {
