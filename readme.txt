@@ -82,8 +82,8 @@ WordPress, by default, does not track when updates have happened. WP Client Repo
 
 = 1.0.23 =
 * Improve code formatting
-* Update Moment.js to 2.30.1
-* Adds additional security hardening
+* Update include moment.min.js to 2.30.1
+* Add nonce verification when sending email report
 * Update readme
 
 = 1.0.22 =
