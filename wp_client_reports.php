@@ -603,7 +603,7 @@ function wp_client_reports_updates_data() {
 	if ( ! current_user_can( 'manage_options' ) ) {
 		echo json_encode( [
 			'status'  => 'error',
-			'message' => __( 'You do not have administrator privilages.', 'wp-client-reports' )
+			'message' => __( 'You do not have administrator privileges.', 'wp-client-reports' )
 		] );
 		wp_die();
 	}
@@ -627,7 +627,7 @@ function wp_client_reports_updates_data() {
 }
 
 /**
- * Validate dates anytime you get an request for data
+ * Validate dates anytime you get a request for data
  */
 function wp_client_reports_validate_dates( $start, $end ) {
 	$dates    = new \stdClass;
@@ -708,7 +708,7 @@ function wp_client_reports_force_refresh() {
 	if ( ! current_user_can( 'manage_options' ) ) {
 		echo json_encode( [
 			'status'  => 'error',
-			'message' => __( 'You do not have administrator privilages.', 'wp-client-reports' )
+			'message' => __( 'You do not have administrator privileges.', 'wp-client-reports' )
 		] );
 		wp_die();
 	}
@@ -728,7 +728,7 @@ function wp_client_reports_content_stats_data() {
 	if ( ! current_user_can( 'manage_options' ) ) {
 		echo json_encode( [
 			'status'  => 'error',
-			'message' => __( 'You do not have administrator privilages.', 'wp-client-reports' )
+			'message' => __( 'You do not have administrator privileges.', 'wp-client-reports' )
 		] );
 		wp_die();
 	}
@@ -1235,7 +1235,7 @@ function wp_client_reports_stats_email_content( $start_date, $end_date ) {
 
 add_action( 'admin_init', 'wp_client_reports_options_init', 10 );
 /**
- * Register the WP CLient Report settings
+ * Register the WP Client Report settings
  */
 function wp_client_reports_options_init() {
 
@@ -1668,7 +1668,7 @@ function wp_client_reports_search_database_for_transients_by_prefix( $prefix ) {
 
 	global $wpdb;
 
-	// Add our prefix after concating our prefix with the _transient prefix
+	// Add our prefix after concatenating our prefix with the _transient prefix
 	$prefix = $wpdb->esc_like( '_transient_' . $prefix . '_' );
 
 	// Build up our SQL query
@@ -1677,12 +1677,12 @@ function wp_client_reports_search_database_for_transients_by_prefix( $prefix ) {
 	// Execute our query
 	$transients = $wpdb->get_results( $wpdb->prepare( $sql, $prefix . '%' ), ARRAY_A );
 
-	// If if looks good, pass it back
+	// If it looks good, pass it back
 	if ( $transients && ! is_wp_error( $transients ) ) {
 		return $transients;
 	}
 
-	// Otherise return false
+	// Otherwise return false
 	return false;
 }
 
@@ -1692,7 +1692,6 @@ function wp_client_reports_search_database_for_transients_by_prefix( $prefix ) {
  * array(
  *     array( 'option_name' => '_transient_blah_blah' ),
  *     array( 'option_name' => 'transient_another_one' ),
- * )
  *
  * Can also pass in an array of transient names.
  *
@@ -1711,7 +1710,7 @@ function wp_client_reports_delete_transients_from_keys( $transients ) {
 		$transients = array( array( 'option_name' => $transients ) );
 	}
 
-	// If its not an array, we can't do anything
+	// If it's not an array, we can't do anything
 	if ( ! is_array( $transients ) ) {
 		return false;
 	}
