@@ -371,15 +371,30 @@ function wp_client_reports_last30_widget_function() {
     <div class="wp-client-reports-big-numbers wp-client-reports-postbox wp-client-reports-last30-widget">
         <div class="wp-client-reports-big-number">
             <h2 id="wp-client-reports-wp-update-count"><?php echo esc_html( $updates_data->wp_updated ); ?></h2>
-            <h3><?php printf( __( 'WordPress %s Core Updates', 'wp-client-reports' ), '<br>' ); ?></h3>
+            <h3>
+				<?php
+				/* translators: %s: <br> tag. */
+				printf( __( 'WordPress %s Core Updates', 'wp-client-reports' ), '<br>' );
+				?>
+            </h3>
         </div><!-- .wp-client-reports-big-number -->
         <div class="wp-client-reports-big-number">
             <h2 id="wp-client-reports-theme-update-count"><?php echo esc_html( $updates_data->total_themes_updated ); ?></h2>
-            <h3><?php printf( __( 'Theme %s Updates', 'wp-client-reports' ), '<br>' ); ?></h3>
+            <h3>
+				<?php
+				/* translators: %s: <br> tag. */
+				printf( __( 'Theme %s Updates', 'wp-client-reports' ), '<br>' );
+				?>
+            </h3>
         </div><!-- .wp-client-reports-big-number -->
         <div class="wp-client-reports-big-number">
             <h2 id="wp-client-reports-plugin-update-count"><?php echo esc_html( $updates_data->total_plugins_updated ); ?></h2>
-            <h3><?php printf( __( 'Plugin %s Updates', 'wp-client-reports' ), '<br>' ); ?></h3>
+            <h3>
+				<?php
+				/* translators: %s: <br> tag. */
+				printf( __( 'Plugin %s Updates', 'wp-client-reports' ), '<br>' );
+				?>
+            </h3>
         </div><!-- .wp-client-reports-big-number -->
     </div><!-- .wp-client-reports-last30-widget -->
 	<?php
@@ -478,7 +493,18 @@ function wp_client_reports_stats_page() {
 
 		<?php if ( ! is_plugin_active( 'wp-client-reports-pro/wp_client_reports_pro.php' ) ) : ?>
             <p style="margin: 20px 0;text-align:center;">
-				<?php printf( __( 'Report created with %1$sWP Client Reports%2$s.', 'wp-client-reports' ), '<a href="https://wpclientreports.com/?utm_source=wordpress&utm_medium=reports&utm_campaign=wpclientreports" target="_blank">', '</a>' ); ?>
+				<?php
+				$link_url   = esc_url( 'https://wpclientreports.com/?utm_source=wordpress&utm_medium=reports&utm_campaign=wpclientreports' );
+				$link_open  = "<a href='{$link_url}' target='_blank' rel='noopener noreferrer'>";
+				$link_close = '</a>';
+
+				printf(
+				/* translators: 1: Opening link tag, 2: Closing link tag */
+					__( 'Report created with %1$sWP Client Reports%2$s.', 'wp-client-reports' ),
+					$link_open,
+					$link_close
+				);
+				?>
             </p>
 		<?php endif; ?>
 
@@ -543,18 +569,22 @@ function wp_client_reports_stats_page_updates() {
                     <div class="wp-client-reports-big-numbers">
 						<?php
 						wp_client_reports_render_big_number(
+						/* translators: %s: <br> tag. */
 							sprintf( __( 'Total %s Updates', 'wp-client-reports' ), '<br>' ),
 							'wp-client-reports-total-update-count'
 						);
 						wp_client_reports_render_big_number(
+						/* translators: %s: <br> tag. */
 							sprintf( __( 'WordPress %s Core Updates', 'wp-client-reports' ), '<br>' ),
 							'wp-client-reports-wp-update-count'
 						);
 						wp_client_reports_render_big_number(
+						/* translators: %s: <br> tag. */
 							sprintf( __( 'Plugin %s Updates', 'wp-client-reports' ), '<br>' ),
 							'wp-client-reports-plugin-update-count'
 						);
 						wp_client_reports_render_big_number(
+						/* translators: %s: <br> tag. */
 							sprintf( __( 'Theme %s Updates', 'wp-client-reports' ), '<br>' ),
 							'wp-client-reports-theme-update-count'
 						);
@@ -813,14 +843,17 @@ function wp_client_reports_stats_page_content() {
                     <div class="wp-client-reports-big-numbers">
 						<?php
 						wp_client_reports_render_big_number(
+						/* translators: %s: <br> tag. */
 							sprintf( __( 'Posts %s Added', 'wp-client-reports' ), '<br>' ),
 							'wp-client-reports-new-posts-count'
 						);
 						wp_client_reports_render_big_number(
+						/* translators: %s: <br> tag. */
 							sprintf( __( 'Pages %s Added', 'wp-client-reports' ), '<br>' ),
 							'wp-client-reports-new-pages-count'
 						);
 						wp_client_reports_render_big_number(
+						/* translators: %s: <br> tag. */
 							sprintf( __( 'Comments %s Added', 'wp-client-reports' ), '<br>' ),
 							'wp-client-reports-new-comments-count'
 						);
@@ -987,7 +1020,8 @@ function wp_client_reports_send_email_report( $start, $end, $report_title = null
 	} else {
 		$start_date_formatted = $start_date_object->format( $date_format );
 		$end_date_formatted   = $end_date_object->format( $date_format );
-		$date_formatted       = sprintf( __( 'From %s - %s', 'wp-client-reports' ), esc_html( $start_date_formatted ), esc_html( $end_date_formatted ) );
+		/* translators: 1: Start date. 2: End date. */
+		$date_formatted = sprintf( __( 'From %1$s - %2$s', 'wp-client-reports' ), esc_html( $start_date_formatted ), esc_html( $end_date_formatted ) );
 	}
 
 	$brand_color = wp_client_reports_get_brand_color();
@@ -1137,15 +1171,19 @@ function wp_client_reports_stats_email_updates( $start_date, $end_date ) {
 
 	wp_client_reports_render_email_row(
 		$updates_data->total_updates,
+		/* translators: %s: <br> tag. */
 		sprintf( __( 'Total %s Updates', 'wp-client-reports' ), '<br>' ),
 		$updates_data->wp_updated,
+		/* translators: %s: <br> tag. */
 		sprintf( __( 'WordPress %s Core Updates', 'wp-client-reports' ), '<br>' )
 	);
 
 	wp_client_reports_render_email_row(
 		$updates_data->total_plugins_updated,
+		/* translators: %s: <br> tag. */
 		sprintf( __( 'Plugin %s Updates', 'wp-client-reports' ), '<br>' ),
 		$updates_data->total_themes_updated,
+		/* translators: %s: <br> tag. */
 		sprintf( __( 'Theme %s Updates', 'wp-client-reports' ), '<br>' )
 	);
 
@@ -1220,13 +1258,16 @@ function wp_client_reports_stats_email_content( $start_date, $end_date ) {
 
 	wp_client_reports_render_email_row(
 		$content_stats_data->posts_count,
+		/* translators: %s: <br> tag. */
 		sprintf( __( 'Posts %s Added', 'wp-client-reports' ), '<br>' ),
 		$content_stats_data->pages_count,
+		/* translators: %s: <br> tag. */
 		sprintf( __( 'Pages %s Added', 'wp-client-reports' ), '<br>' )
 	);
 
 	wp_client_reports_render_email_row(
 		$content_stats_data->comments_count,
+		/* translators: %s: <br> tag. */
 		sprintf( __( 'Comments %s Added', 'wp-client-reports' ), '<br>' ),
 		null,
 		null
@@ -1516,7 +1557,8 @@ function wp_client_reports_options_page() {
                                     </ul>
                                     <div>
                                         <a href="https://wpclientreports.com/?utm_source=wordpress&utm_medium=plugin_settings&utm_campaign=wpclientreports"
-                                           class="button" target='_blank'><?php _e( 'WP Client Reports Pro', 'wp-client-reports' ); ?></a>
+                                           class="button"
+                                           target='_blank'><?php _e( 'WP Client Reports Pro', 'wp-client-reports' ); ?></a>
                                     </div>
                                 </div>
                             </div><!-- #wp-client-reports-pro -->

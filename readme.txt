@@ -84,6 +84,7 @@ WordPress, by default, does not track when updates have happened. WP Client Repo
 * Update link to GitHub repo
 * Fix typos in admin notifications
 * Add missing textdomains - Credit: @pedromendonca
+* Added translator comments - Credit: @pedromendonca
 * Tested up to WordPress v6.8
 * Update readme
 
