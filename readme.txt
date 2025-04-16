@@ -81,6 +81,8 @@ WordPress, by default, does not track when updates have happened. WP Client Repo
 
 = 1.0.24 =
 * Replace all links to switchwp.com with wpclientreports.com
+* Update link to GitHub repo
+* Fix typos in admin notifications.
 * Tested up to WordPress v6.8
 * Update readme
 
