@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: WP Client Reports
-Plugin URI: https://switchwp.com/wp-client-reports/
-Description: Displays update statistics directly in the WordPress admin or send reports via email.
+Plugin URI: https://wpclientreports.com/
+Description: Display update statistics directly in the WordPress admin or send reports via email.
 Version: 1.0.24
-Author: SwitchWP
-Author URI: https://switchwp.com/
+Author: WP Client Reports
+Author URI: https://wpclientreports.com/
 Text Domain: wp-client-reports
 Domain Path: /languages/
 */
@@ -75,7 +75,7 @@ add_filter( 'plugin_row_meta', 'wp_client_reports_plugin_page_links2', 10, 4 );
  */
 function wp_client_reports_plugin_page_links2( $links_array, $plugin_file_name, $plugin_data, $status ) {
 	if ( strpos( $plugin_file_name, basename( __FILE__ ) ) ) {
-		$links_array[] = '<a href="https://switchwp.com/docs/product/wp-client-reports/?utm_source=wordpress&utm_medium=pluginscreen&utm_campaign=wpclientreports" target="_blank">' . __( 'Docs', 'wp-client-reports' ) . '</a>';
+		$links_array[] = '<a href="https://wpclientreports.com/docs/?utm_source=wordpress&utm_medium=pluginscreen&utm_campaign=wpclientreports" target="_blank">' . __( 'Docs', 'wp-client-reports' ) . '</a>';
 	}
 
 	return $links_array;
@@ -446,7 +446,7 @@ function wp_client_reports_stats_page() {
 
 		<?php if ( ! is_plugin_active( 'wp-client-reports-pro/wp_client_reports_pro.php' ) ) : ?>
             <p style="margin: 20px 0;text-align:center;">
-				<?php printf( __( 'Report created with %1$sWP Client Reports%2$s.', 'wp-client-reports' ), '<a href="https://switchwp.com/plugins/wp-client-reports/?utm_source=wordpress&utm_medium=reports&utm_campaign=wpclientreports" target="_blank">', '</a>' ); ?>
+				<?php printf( __( 'Report created with %1$sWP Client Reports%2$s.', 'wp-client-reports' ), '<a href="https://wpclientreports.com/?utm_source=wordpress&utm_medium=reports&utm_campaign=wpclientreports" target="_blank">', '</a>' ); ?>
             </p>
 		<?php endif; ?>
 
@@ -1443,7 +1443,7 @@ function wp_client_reports_options_page() {
                                         <li><?php _e( 'WooCommerce' ); ?></li>
                                         <li><?php _e( 'Gravity Forms & Ninja Forms' ); ?></li>
                                     </ul>
-                                    <div><a href="https://switchwp.com/plugins/wp-client-reports/?utm_source=wordpress&utm_medium=plugin_settings&utm_campaign=wpclientreports"
+                                    <div><a href="https://wpclientreports.com/?utm_source=wordpress&utm_medium=plugin_settings&utm_campaign=wpclientreports"
                                             class="button" target='_blank'><?php _e( 'WP Client Reports Pro' ); ?></a></div>
                                 </div>
                             </div><!-- #wp-client-reports-pro -->
@@ -1452,11 +1452,11 @@ function wp_client_reports_options_page() {
                             <div class="inside">
                                 <p>
 									<?php
-									$sitelink   = "<a href='https://switchwp.com/plugins/wp-client-reports/?utm_source=wordpress&utm_medium=plugin_settings&utm_campaign=wpclientreports' target='_blank'>";
-									$githublink = "<a href='https://github.com/TheJester12/wp-client-reports' target='_blank'>";
+									$sitelink   = "<a href='https://wpclientreports.com/?utm_source=wordpress&utm_medium=plugin_settings&utm_campaign=wpclientreports' target='_blank'>";
+									$githublink = "<a href='https://github.com/WPClientReports/wp-client-reports' target='_blank'>";
 									$pluginlink = "<a href='https://wordpress.org/plugins/wp-client-reports/' target='_blank'>";
 									$endlink    = "</a>";
-									printf( __( 'Learn more about the plugin and its capabilities on the %1$sSwitchWP website%2$s. Found a bug or have a feature request? Let me know on the %3$sWP plugin directory%4$s, or send a pull request on %5$sGitHub%6$s.', 'wp-client-reports' ), $sitelink, $endlink, $pluginlink, $endlink, $githublink, $endlink );
+									printf( __( 'Learn more about the plugin and its capabilities on the %1$sSwitchWP website%2$s. Found a bug or have a feature request? Let us know on the %3$sWP plugin directory%4$s, or send a pull request via %5$sGitHub%6$s.', 'wp-client-reports' ), $sitelink, $endlink, $pluginlink, $endlink, $githublink, $endlink );
 									?>
                                 </p>
                             </div>
