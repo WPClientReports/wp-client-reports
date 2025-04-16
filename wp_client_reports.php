@@ -3,7 +3,7 @@
 Plugin Name: WP Client Reports
 Plugin URI: https://switchwp.com/wp-client-reports/
 Description: Displays update statistics directly in the WordPress admin or send reports via email.
-Version: 1.0.23
+Version: 1.0.24
 Author: SwitchWP
 Author URI: https://switchwp.com/
 Text Domain: wp-client-reports
@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'WP_CLIENT_REPORTS_VERSION', '1.0.23' );
+define( 'WP_CLIENT_REPORTS_VERSION', '1.0.24' );
 
 add_action( 'admin_enqueue_scripts', 'wp_client_reports_scripts' );
 /**
