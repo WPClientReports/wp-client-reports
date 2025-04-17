@@ -1,10 +1,9 @@
 === WP Client Reports ===
-Contributors: MikeGillihan, causelabs
-Donate link: https://switchwp.com/plugins/wp-client-reports/
+Contributors: wpclientreports, causelabs, mikegillihan
 Tags: reports, client reports, maintenance reports, analytics, client dashboard
 Requires at least: 5.3.0
-Tested up to: 6.4
-Stable tag: 1.0.23
+Tested up to: 6.8
+Stable tag: 1.0.24
 Requires PHP: 5.6.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -27,13 +26,13 @@ Keeping your clients and other site stakeholders updated with a detailed, profes
 
 > <strong>WP Client Reports Pro</strong><br />
 > This plugin is the lite version of WP Client Reports Pro, which includes custom branding, automated report scheduling, maintenance notes, and many other integrations.<br />
-> [Click here to purchase the best WordPress reporting plugin now!](https://wpforms.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteplugin)
+> [Click here to purchase the best WordPress reporting plugin now!](https://wpclientreports.com/?utm_source=wporg&utm_medium=link&utm_campaign=wpclientreports&utm_content=readme)
 
 == — Pro Version — ==
 
-[WP Client Reports Pro](https://switchwp.com/plugins/wp-client-reports/?utm_source=wporg&utm_medium=link&utm_campaign=wpclientreports&utm_content=readme) takes your client reporting to the next level. With this upgrade, you can brand your maintenance reports with your logo and company color, schedule automatic report delivery, and integrate additional statistics from a variety of services and plugins.
+[WP Client Reports Pro](https://wpclientreports.com?utm_source=wporg&utm_medium=link&utm_campaign=wpclientreports&utm_content=readme) takes your client reporting to the next level. With this upgrade, you can brand your maintenance reports with your logo and company color, schedule automatic report delivery, and integrate additional statistics from a variety of services and plugins.
 
-[Click here to purchase WP Client Reports Pro now!](https://switchwp.com/plugins/wp-client-reports/?utm_source=wporg&utm_medium=link&utm_campaign=wpclientreports&utm_content=readme)
+[Click here to purchase WP Client Reports Pro now!](https://wpclientreports.com/pricing/?utm_source=wporg&utm_medium=link&utm_campaign=wpclientreports&utm_content=readme)
 
 = Pro Version Features =
 
@@ -55,7 +54,7 @@ Keeping your clients and other site stakeholders updated with a detailed, profes
 - **Streamline Your Workflow**: Automate report delivery, saving you time and effort.
 - **Provide Comprehensive Insights**: Offer clients a complete overview of their website's performance and your maintenance activities.
 
-Have an idea that should be added? Get in touch at [SwitchWP](https://switchwp.com/contact/?utm_source=wporg&utm_medium=link&utm_campaign=wpclientreports&utm_content=readme).
+Have an idea that should be added? Submit a feature request at [wpclientreports.com](https://wpclientreports.com/feature-requests/?utm_source=wporg&utm_medium=link&utm_campaign=wpclientreports&utm_content=readme).
 
 == Installation ==
 
@@ -79,6 +78,15 @@ WordPress, by default, does not track when updates have happened. WP Client Repo
 4. Manage email settings and which sections are enabled
 
 == Changelog ==
+
+= 1.0.24 =
+* Replace all links to switchwp.com with wpclientreports.com
+* Update link to GitHub repo
+* Fix typos in admin notifications
+* Add missing textdomains - Credit: @pedromendonca
+* Added translator comments - Credit: @pedromendonca
+* Tested up to WordPress v6.8
+* Update readme
 
 = 1.0.23 =
 * Improve code formatting
