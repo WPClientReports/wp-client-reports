@@ -1,3 +1,9 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Template partial; variables are local to the including function scope.
+?>
 </table>
 <!--[if (gte mso 9)|(IE)]>
 </td>
@@ -24,11 +30,14 @@
 							$link_open  = "<a href='{$link_url}' target='_blank' rel='noopener noreferrer'>";
 							$link_close = '</a>';
 
-							printf(
-							/* translators: 1: Opening link tag, 2: Closing link tag */
-								__( 'Report created with %1$sWP Client Reports%2$s.', 'wp-client-reports' ),
-								$link_open,
-								$link_close
+							echo wp_kses(
+								sprintf(
+								/* translators: 1: Opening link tag, 2: Closing link tag */
+									__( 'Report created with %1$sWP Client Reports%2$s.', 'wp-client-reports' ),
+									$link_open,
+									$link_close
+								),
+								array( 'a' => array( 'href' => array(), 'target' => array(), 'rel' => array() ) )
 							);
 							?>
                         </p>
@@ -46,7 +55,7 @@
 							$email_footer = stripslashes( wp_kses( $email_footer, $allowed_html ) );
 						}
 						?>
-						<?php echo $email_footer; ?>
+						<?php echo wp_kses( $email_footer, $allowed_html ); ?>
                     </p>
                 </td>
             </tr>

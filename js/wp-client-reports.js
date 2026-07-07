@@ -25,7 +25,7 @@
         });
 
         $("#wp-client-reports-force-refresh").click(function() {
-            var dataString = 'action=wp_client_reports_force_refresh';
+            var dataString = 'action=wp_client_reports_force_refresh&_ajax_nonce=' + wp_client_reports_data.nonce;
             $.ajax({
                 type: "GET",
                 url: ajaxurl,
@@ -254,7 +254,7 @@
     $(document).on('wp_client_reports_js_get_data', function(event, start_date_utc, end_date_utc){
         if ($('#wp-client-reports-updates').length) {
             $('#wp-client-reports-updates').addClass('loading');
-            var dataString = 'action=wp_client_reports_updates_data&start=' + start_date_utc + '&end=' + end_date_utc;
+            var dataString = 'action=wp_client_reports_updates_data&start=' + start_date_utc + '&end=' + end_date_utc + '&_ajax_nonce=' + wp_client_reports_data.nonce;
             var js_date_format = getDateFormat();
             $.ajax({
                 type: "GET",
@@ -298,7 +298,7 @@
     $(document).on('wp_client_reports_js_get_data', function(event, start_date_utc, end_date_utc){
         if ($('#wp-client-reports-content-stats').length) {
             $('#wp-client-reports-content-stats').addClass('loading');
-            var dataString = 'action=wp_client_reports_content_stats_data&start=' + start_date_utc + '&end=' + end_date_utc;
+            var dataString = 'action=wp_client_reports_content_stats_data&start=' + start_date_utc + '&end=' + end_date_utc + '&_ajax_nonce=' + wp_client_reports_data.nonce;
             var js_date_format = getDateFormat();
             $.ajax({
                 type: "GET",

@@ -2,8 +2,8 @@
 Contributors: wpclientreports, causelabs, mikegillihan
 Tags: reports, client reports, maintenance reports, analytics, client dashboard
 Requires at least: 5.3.0
-Tested up to: 6.8
-Stable tag: 1.0.24
+Tested up to: 7.0
+Stable tag: 1.0.25
 Requires PHP: 5.6.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -78,6 +78,17 @@ WordPress, by default, does not track when updates have happened. WP Client Repo
 4. Manage email settings and which sections are enabled
 
 == Changelog ==
+
+= 1.0.25 =
+* Fix PHP 8 fatal error when invalid date parameters are passed to the reports date range
+* Harden database calls with documented query annotations (no functional change)
+* Add sanitization callbacks to all plugin settings
+* Add nonce verification to report AJAX requests and harden request input handling
+* Escape all report and email output and improve translation/date handling
+* Add license header and direct-access protection to email templates
+* Use the Moment.js library bundled with WordPress core
+* Fix alignment of the reports dashboard header title and button icons
+* Update "Tested up to" to WordPress 7.0
 
 = 1.0.24 =
 * Replace all links to switchwp.com with wpclientreports.com
